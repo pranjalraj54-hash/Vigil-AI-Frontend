@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vigil-AI — Help</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:        #0a0a0c;
+  --panel:     #16171b;
+  --panel-2:   #1c1d22;
+  --border:    rgba(255,255,255,0.07);
+  --border-2:  rgba(255,255,255,0.12);
+  --track:     #26272c;
+
+  --fg:        #f2f2f0;
+  --muted:     #9b9ba2;
+  --faint:     #5c5c63;
+
+  --critical:  #ff5a5a;
+  --high:      #ff9f40;
+  --medium:    #f5c244;
+  --low:       #4d9fff;
+  --benign:    #3ecf7e;
+  --escalate:  #b285ff;
+
+  --r-sm: 7px;
+  --r-md: 10px;
+  --r-lg: 14px;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ color-scheme: dark; }
+
+body{
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+a{ color: inherit; text-decoration: none; }
+button{ font-family: inherit; }
+::selection{ background: rgba(178,133,255,0.18); color: var(--fg); }
+:focus-visible{ outline: 2px solid var(--escalate); outline-offset: 2px; border-radius: var(--r-sm); }
+
+.shell{ max-width: 920px; margin: 0 auto; padding: 0 28px; }
+
+/* ---------- topbar ---------- */
+
+.topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 28px; border-bottom:1px solid var(--border);
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(10,10,12,0.9); backdrop-filter: blur(10px);
+}
+.topbar-left{ display:flex; align-items:center; }
+.topbar-right{ display:flex; align-items:center; gap: 16px; }
+
+.logo{
+  font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:16px;
+  display:flex; align-items:center; gap:8px; margin-right:28px;
+}
+.logo .dot{ width:6px; height:6px; border-radius:50%; background:var(--benign); box-shadow:0 0 8px var(--benign); }
+
+.tabs{ display:flex; align-items:center; gap:2px; }
+.tabs a{ font-size:13.5px; color:var(--muted); padding:8px 14px; border-radius:8px; white-space:nowrap; }
+.tabs a:hover{ color:var(--fg); }
+.tabs a.active{ background:var(--fg); color:#0a0a0c; font-weight:600; border-radius:999px; }
+
+.help-link{ font-size:13.5px; color:var(--muted); padding:8px 14px; border-radius:8px; }
+.help-link:hover{ color:var(--fg); }
+.help-link.active{ background:var(--fg); color:#0a0a0c; font-weight:600; border-radius:999px; }
+
+.demo-pill{
+  font-family:'JetBrains Mono'; font-size:10.5px; letter-spacing:0.03em; color:var(--muted);
+  display:flex; align-items:center; gap:7px; padding:6px 11px;
+  border:1px solid var(--border-2); border-radius:999px;
+}
+.demo-pill .pulse{ width:6px; height:6px; border-radius:50%; background:var(--escalate); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
+
+/* ---------- ai search bar ---------- */
+
+.ai-search-bar{
+  display:flex; align-items:center; gap:11px;
+  background:var(--panel); border:1px solid var(--border-2); border-radius:12px; padding:13px 16px;
+}
+.ai-search-bar svg{ flex-shrink:0; color:var(--faint); }
+.ai-search-bar input{ flex:1; background:none; border:none; outline:none; color:var(--fg); font-size:13.5px; font-family:'Inter'; min-width:0; }
+.ai-search-bar input::placeholder{ color:var(--faint); }
+.ai-search-bar .ai-go{ background:var(--fg); color:#0a0a0c; border:none; border-radius:8px; padding:8px 14px; font-size:12px; font-weight:600; cursor:pointer; flex-shrink:0; }
+.ai-search-bar .ai-go:hover{ background:#dcdbd8; }
+.ai-search-wrap{ position:relative; }
+.ai-dropdown{
+  display:none; position:absolute; left:0; right:0; top:calc(100% + 8px); z-index:20;
+  background:var(--panel); border:1px solid var(--border-2); border-radius:var(--r-md);
+  overflow:hidden; box-shadow:0 14px 30px rgba(0,0,0,.35);
+}
+.ai-dropdown.show{ display:block; }
+.ai-dropdown-item{ padding:11px 14px; font-size:12.5px; color:var(--fg); cursor:pointer; border-top:1px solid var(--border); }
+.ai-dropdown-item:first-child{ border-top:none; }
+.ai-dropdown-item:hover{ background:var(--panel-2); }
+.ai-dropdown-empty{ padding:11px 14px; font-size:12px; color:var(--faint); border-top:1px solid var(--border); }
+.search-answer{ display:none; margin-top:10px; padding:14px 16px; background:var(--panel); border:1px solid var(--border); border-radius:var(--r-md); }
+.search-answer.show{ display:block; }
+.search-answer .sa-q{ font-family:'JetBrains Mono'; font-size:11px; color:var(--escalate); margin-bottom:8px; }
+.search-answer .sa-a{ font-size:13.5px; color:var(--fg); line-height:1.6; }
+.ai-badge{
+  display:flex; align-items:center; gap:5px;
+  font-family:'JetBrains Mono'; font-size:10px; font-weight:600;
+  color:var(--escalate); background:rgba(178,133,255,0.12);
+  padding:4px 8px; border-radius:6px; flex-shrink:0;
+}
+
+.search-answer{
+  display:none; margin-top: 12px; padding: 14px 16px;
+  background: var(--panel); border:1px solid var(--border); border-radius: var(--r-md);
+}
+.search-answer.show{ display:block; }
+.search-answer .sa-q{ font-family:'JetBrains Mono'; font-size:11px; color: var(--escalate); margin-bottom:8px; }
+.search-answer .sa-a{ font-size:13.5px; color: var(--fg); line-height:1.6; }
+.search-answer .sa-empty{ font-size:12.5px; color: var(--muted); }
+
+/* ---------- card ---------- */
+.card{ background:var(--panel); border:1px solid var(--border); border-radius:14px; }
+
+/* ============================================================
+   PAGE
+   ============================================================ */
+
+.page{ padding: 40px 0 100px; }
+
+.help-intro{ margin-bottom: 26px; }
+.help-intro .eyebrow{ font-family:'JetBrains Mono'; font-size: 11px; color: var(--escalate); margin-bottom: 10px; }
+.help-intro h1{ font-family:'Space Grotesk'; font-size: 26px; font-weight: 600; margin-bottom: 10px; }
+.help-intro p{ font-size: 14.5px; color: var(--muted); max-width: 620px; }
+
+section{ margin-top: 44px; }
+section h2{ font-family:'Space Grotesk'; font-size: 15.5px; font-weight: 600; margin-bottom: 16px; }
+
+/* what is */
+.lede-card{ padding: 22px 24px; }
+.lede-card p{ font-size: 14.5px; color: var(--fg); line-height: 1.7; }
+
+/* how it works */
+.flow-steps{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 760px){ .flow-steps{ grid-template-columns: 1fr 1fr; } }
+.flow-step{ padding: 20px 18px; }
+.flow-step .fs-num{ font-family:'JetBrains Mono'; font-size:11px; color: var(--escalate); margin-bottom: 12px; }
+.flow-step h3{ font-family:'Space Grotesk'; font-size: 13.5px; font-weight:600; margin-bottom: 8px; letter-spacing: 0.01em; }
+.flow-step p{ font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+
+/* detection grid */
+.detect-tags{ display:flex; flex-wrap:wrap; gap: 9px; }
+.detect-tag{ font-size:12.5px; padding:8px 14px; border-radius:999px; background:var(--panel); border:1px solid var(--border-2); color: var(--fg); }
+.proto-note{ font-family:'JetBrains Mono'; font-size:10.5px; color: var(--faint); margin-top: 12px; }
+
+/* how to use */
+.usage-cols{ display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 700px){ .usage-cols{ grid-template-columns: 1fr; } }
+.usage-card{ padding: 20px 22px; }
+.usage-card h3{ font-family:'Space Grotesk'; font-size: 13.5px; font-weight: 600; margin-bottom: 14px; }
+.usage-list{ counter-reset: step; }
+.usage-list li{
+  list-style: none; counter-increment: step;
+  display:flex; gap: 12px; margin-bottom: 12px; font-size: 13px; color: var(--fg);
+}
+.usage-list li::before{
+  content: counter(step); flex-shrink:0;
+  width: 20px; height:20px; border-radius:50%; background: var(--panel-2); border:1px solid var(--border-2);
+  display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono'; font-size: 10.5px; color: var(--muted);
+}
+.usage-list li:last-child{ margin-bottom: 0; }
+
+/* understanding results */
+.confidence-grid{ display:flex; flex-direction:column; gap: 12px; }
+.confidence-row{ display:flex; gap:14px; padding: 16px 18px; align-items:flex-start; }
+.confidence-row .sev-badge{
+  font-family:'JetBrains Mono'; font-size:10px; letter-spacing:0.02em;
+  padding:4px 9px; border-radius:999px; display:inline-flex; align-items:center; gap:5px; flex-shrink:0; margin-top: 2px;
+}
+.confidence-row .sev-badge::before{ content:''; width:5px; height:5px; border-radius:50%; }
+.sev-high{ color:var(--high); background:rgba(255,159,64,0.12); } .sev-high::before{ background:var(--high); }
+.sev-medium{ color:var(--medium); background:rgba(245,194,68,0.12); } .sev-medium::before{ background:var(--medium); }
+.sev-low{ color:var(--low); background:rgba(77,159,255,0.12); } .sev-low::before{ background:var(--low); }
+.confidence-row p{ font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+/* important note */
+.note-card{ padding: 20px 22px; }
+.note-card p{ font-size: 13px; color: var(--muted); line-height: 1.6; }
+.note-card .label{ font-family:'JetBrains Mono'; font-size: 10.5px; color: var(--faint); margin-bottom: 8px; letter-spacing: 0.03em; }
+.help-search{ margin-top:32px; margin-bottom:40px; }
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a class="logo" href="index.html" aria-label="Vigil-AI landing page"><span class="dot"></span>VIGIL&nbsp;·&nbsp;AI</a>
+    <div class="tabs">
+      <a href="home.html">Home</a>
+      <a href="live-monitoring-option-2.html">Live Monitoring</a>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <a href="help.html" class="help-link active">Help</a>
+    <div class="demo-pill"><span class="pulse"></span>DEMO · SIMULATED DATA</div>
+  </div>
+</div>
+
+<div class="page">
+  <div class="shell">
+
+    <div class="help-intro">
+      <h1>How Vigil-AI works</h1>
+    </div>
+
+    <section>
+      <h2>What is Vigil-AI?</h2>
+      <div class="lede-card card">
+        <p>Vigil-AI is a video intelligence platform that analyzes CCTV footage, identifies meaningful events, and helps security teams investigate incidents without manually reviewing hours of video. It's an intelligence layer for the cameras you already have — not another dashboard to replace them.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>How it works</h2>
+      <div class="flow-steps">
+        <div class="flow-step card">
+          <div class="fs-num">01</div>
+          <h3>Upload / Connect</h3>
+          <p>Upload recorded footage or connect live camera feeds.</p>
+        </div>
+        <div class="flow-step card">
+          <div class="fs-num">02</div>
+          <h3>Detect</h3>
+          <p>Vigil-AI identifies people, vehicles, objects, zones, and unusual activity.</p>
+        </div>
+        <div class="flow-step card">
+          <div class="fs-num">03</div>
+          <h3>Understand</h3>
+          <p>Events are organized into timelines and incidents with contextual explanations.</p>
+        </div>
+        <div class="flow-step card">
+          <div class="fs-num">04</div>
+          <h3>Investigate &amp; Report</h3>
+          <p>Review relevant footage and generate an evidence-based report.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>What can Vigil-AI detect?</h2>
+      <div class="detect-tags">
+        <span class="detect-tag">People</span>
+        <span class="detect-tag">Vehicles</span>
+        <span class="detect-tag">Restricted-area entry</span>
+        <span class="detect-tag">Loitering</span>
+        <span class="detect-tag">Unattended objects</span>
+        <span class="detect-tag">Possible weapons</span>
+        <span class="detect-tag">Crowd activity</span>
+        <span class="detect-tag">Other configurable events</span>
+      </div>
+      <div class="proto-note">Prototype examples — a production deployment would be configured per site.</div>
+    </section>
+
+    <section>
+      <h2>How to use Vigil-AI</h2>
+      <div class="usage-cols">
+        <div class="usage-card card">
+          <h3>On the Home page</h3>
+          <ol class="usage-list">
+            <li>Upload footage</li>
+            <li>Review the AI-generated timeline and report</li>
+            <li>Click a timestamp to jump to that moment</li>
+          </ol>
+        </div>
+        <div class="usage-card card">
+          <h3>On Live Monitoring</h3>
+          <ol class="usage-list">
+            <li>Open Live Monitoring</li>
+            <li>Watch active camera feeds</li>
+            <li>Review AI alerts as incidents are detected</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Understanding AI results</h2>
+      <div class="confidence-grid">
+        <div class="confidence-row card">
+          <span class="sev-badge sev-high">HIGH CONFIDENCE</span>
+          <p>The system has strong visual evidence for the detected event.</p>
+        </div>
+        <div class="confidence-row card">
+          <span class="sev-badge sev-medium">MEDIUM CONFIDENCE</span>
+          <p>The event may require human verification.</p>
+        </div>
+        <div class="confidence-row card">
+          <span class="sev-badge sev-low">POSSIBLE EVENT</span>
+          <p>The system detected visual patterns associated with the event but this should not be treated as definitive.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="help-search ai-search-wrap" id="aiSearchWrap">
+      <div class="ai-search-bar">
+        <span class="ai-badge">✦ AI</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="aiQuery" type="text" placeholder="Ask Vigil-AI — e.g. 'what does high confidence mean?'">
+        <button class="ai-go" id="aiSearch">Search</button>
+      </div>
+      <div class="ai-dropdown" id="aiDropdown"></div>
+      <div class="search-answer" id="searchAnswer">
+        <div class="sa-q" id="saQ"></div>
+        <div class="sa-a" id="saA"></div>
+      </div>
+    </div>
+
+    <section>
+      <h2>Important note</h2>
+      <div class="note-card card">
+        <div class="label">PROTOTYPE STATUS</div>
+        <p>Vigil-AI is currently demonstrated using simulated data. Production deployments would connect to existing camera/VMS infrastructure and apply appropriate human verification and security policies.</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+const PAGE_QA = [
+  { q:'What does high confidence mean?', a:'High confidence means the system has strong visual evidence for the detected event — a human should still confirm it before acting.' },
+  { q:'What does medium confidence mean?', a:'Medium confidence means the event may require human verification — the pattern is plausible but not certain.' },
+  { q:"What does 'possible event' mean?", a:"A 'possible event' means Vigil-AI detected visual patterns associated with the event type, but this should not be treated as definitive." },
+  { q:'How do I upload footage?', a:'On the Home page, drag and drop an MP4 into the upload box (or click to browse). Once it is selected, click Analyze Footage.' },
+  { q:'How do I read the incident report?', a:'After analysis, an incident report appears next to the video with timestamped events. Click any timestamp to jump to that point, and use Download Report to export it.' },
+  { q:'How does Live Monitoring work?', a:"Live Monitoring shows original camera feeds side by side with Vigil-AI's analysed output, each with a brief finding — click into one for the full incident detail." },
+  { q:'Can Vigil-AI detect weapons?', a:'Vigil-AI can flag visual patterns consistent with a concealed weapon, but any such detection always requires immediate human verification — it is never treated as confirmed.' },
+  { q:'What is Vigil-AI?', a:'Vigil-AI is a video intelligence layer for existing CCTV — it analyzes footage, organizes events into timelines, and helps you investigate without watching hours of recordings.' },
+  { q:'What can Vigil-AI detect?', a:'In this prototype, Vigil-AI can flag people, vehicles, restricted-area entry, loitering, unattended objects, possible weapons, and crowd activity.' }
+];
+const searchWrap = document.getElementById('aiSearchWrap');
+const searchInput = document.getElementById('aiQuery');
+const searchBtn = document.getElementById('aiSearch');
+const dropdown = document.getElementById('aiDropdown');
+const searchAnswer = document.getElementById('searchAnswer');
+const saQ = document.getElementById('saQ');
+const saA = document.getElementById('saA');
+function renderDropdown(filter){
+  const f = (filter || '').trim().toLowerCase();
+  const matches = PAGE_QA.filter(item => item.q.toLowerCase().includes(f));
+  const list = matches.length ? matches : PAGE_QA;
+  dropdown.innerHTML = (matches.length ? '' : '<div class="ai-dropdown-empty">No matching question — try one below</div>') + list.map(item => `<div class="ai-dropdown-item" data-i="${PAGE_QA.indexOf(item)}">${item.q}</div>`).join('');
+  dropdown.querySelectorAll('.ai-dropdown-item[data-i]').forEach(el => el.addEventListener('click', () => selectQuestion(Number(el.dataset.i))));
+}
+function selectQuestion(i){
+  const item = PAGE_QA[i];
+  searchInput.value = item.q;
+  dropdown.classList.remove('show');
+  saQ.textContent = item.q;
+  saA.textContent = item.a;
+  searchAnswer.classList.add('show');
+}
+searchInput.addEventListener('focus', () => { renderDropdown(searchInput.value); dropdown.classList.add('show'); });
+searchInput.addEventListener('input', () => { renderDropdown(searchInput.value); dropdown.classList.add('show'); });
+searchBtn.addEventListener('click', () => {
+  const exact = PAGE_QA.find(item => item.q.toLowerCase() === searchInput.value.trim().toLowerCase());
+  if(exact) selectQuestion(PAGE_QA.indexOf(exact));
+  else { renderDropdown(searchInput.value); dropdown.classList.add('show'); }
+});
+searchInput.addEventListener('keydown', e => { if(e.key === 'Enter') searchBtn.click(); });
+document.addEventListener('click', e => { if(!searchWrap.contains(e.target)) dropdown.classList.remove('show'); });
+</script>
+</body>
+</html>
