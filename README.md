@@ -282,15 +282,6 @@ This project is a **demo/prototype** built to showcase the VIGIL-AI product conc
 
 ---
 
-## 👥 Team
-
-| | Name | Role |
-|---|---|---|
-| ◉ | **Rudransh Tripathi** | Founder |
-| ◉ | **Pranjal Raj** | Co-Founder |
-
----
-
 <p align="center">
 
 ### `◉ VIGIL-AI`
