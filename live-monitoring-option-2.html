@@ -364,16 +364,15 @@ button{ font-family: inherit; }
   }
 
   .pair-row{
-    grid-template-columns:1fr;
-    gap:9px;
-  }
+  grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);
+  gap:6px;
+}
 
-  .pair-arrow{
-    transform:rotate(90deg);
-    width:28px;
-    height:28px;
-  }
-
+.pair-arrow{
+  transform:none;
+  width:28px;
+  height:28px;
+}
   .pair-arrow svg{
     width:12px;
     height:12px;
@@ -385,8 +384,11 @@ button{ font-family: inherit; }
   }
 
   .pair-report{
-    padding:14px;
-  }
+  grid-column:1;
+  grid-row:auto;
+  width:100%;
+  padding:14px;
+}
 
   .pr-finding{
     font-size:13px;
