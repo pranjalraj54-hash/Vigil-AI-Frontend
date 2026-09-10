@@ -1527,18 +1527,11 @@ function seekToEvent(evt){
   )
     return;
 
-  const fraction =
-    Math.min(
-      1,
-      Math.max(
-        0,
-        evt.timeSeconds /
-        VIGIL_DATA.meta.footage.durationSeconds
-      )
-    );
-
   videoEl.currentTime =
-    videoEl.duration * fraction;
+    Math.min(
+      Math.max(0, evt.timeSeconds),
+      videoEl.duration
+    );
 
   updatePlayer();
 }
