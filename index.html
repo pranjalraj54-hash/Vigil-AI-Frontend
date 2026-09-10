@@ -318,6 +318,19 @@
   @media (prefers-reduced-motion: reduce){
     .tile, .glow{ animation:none; opacity:0; }
   }
+  .mobile-entry {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .desktop-entry {
+    display: none;
+  }
+
+  .mobile-entry {
+    display: inline;
+  }
+}
 </style>
 </head>
 <body>
@@ -338,7 +351,10 @@
   </div>
 </div>
 
-<div class="entry-hint"><kbd>SPACE</kbd> TO ENTER</div>
+<div class="entry-hint">
+  <span class="desktop-entry"><kbd>SPACE</kbd> TO ENTER</span>
+  <span class="mobile-entry">CLICK ANYWHERE TO ENTER</span>
+</div>
 <script>
   const wrap = document.getElementById('streamWrap');
   const count = 11;
