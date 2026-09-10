@@ -886,8 +886,15 @@ input[type="file"]{
   .tabs::-webkit-scrollbar{display:none;}
   .tabs a{font-size:12px; padding:7px 9px;}
   .topbar-right{gap:7px; flex:0 0 auto;}
-  .help-link{font-size:12px; padding:7px 8px;}
-  .demo-pill{font-size:9px; padding:5px 8px; white-space:nowrap;}
+  .help-link{font-size:12px; padding:7px 8px; flex-shrink:0;}
+  .demo-pill{
+    font-size:9px;
+    padding:5px 8px;
+    max-width:calc(100vw - 130px);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
   .shell{width:100%; padding:0 14px;}
   .page{padding:24px 0 60px;}
   .page-header{align-items:flex-start; margin-bottom:16px;}
@@ -901,7 +908,6 @@ input[type="file"]{
   .topbar-right{width:100%; justify-content:flex-end;}
   .tabs{flex:1;}
   .tabs a{flex:0 0 auto;}
-  .demo-pill{max-width:100%; overflow:hidden; text-overflow:ellipsis;}
   .modal-backdrop{padding:10px;}
   .modal{padding:18px; max-height:92vh; border-radius:12px;}
   .modal-head{gap:7px;}
